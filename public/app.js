@@ -61,6 +61,15 @@ function generateDepartmentString(departments) {
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
 }
 
+function summarizeArticle(url) {
+	const req = new Request('/summarize/?' + `url=${url}`);
+
+	return fetch(req)
+	    .then(function(response) {
+	        return response.json();
+	    });
+}
+
 function renderDepartments(state) {
  	const req = new Request('/departments');
 
@@ -82,6 +91,10 @@ function renderDepartments(state) {
 function handleEvents() {
 
     renderDepartments(state);
+    summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
+    	.then(function(summary) {
+    		console.log(summary);
+    	});
 
 }
 

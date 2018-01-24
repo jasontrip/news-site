@@ -3,9 +3,13 @@
 require('dotenv').config();
 const express = require('express');
 const request = require('request');
-
+const AYLIENTextAPI = require('aylien_textapi');
 
 const app = express();
+const textapi = new AYLIENTextAPI({
+	application_id: process.env.AYLIEN_APP_ID,
+	application_key: process.env.AYLIEN_TEXT_API_KEY
+});
 
 const DEPARTMENTS = require('./departments');
 const NEWS_API_URL = 'https://newsapi.org/v2/everything?';
@@ -55,10 +59,6 @@ function getNewsItems(departments, promises) {
 
 }
 app.get('/departments', (req, res) => {
-
-
-
-
 	const promises = [];
 	
 	getNewsItems(DEPARTMENTS, promises);
@@ -71,6 +71,37 @@ app.get('/departments', (req, res) => {
 
 });
 
+function getArticleSummary(url, numberOfSentences) {
+	console.log("summarizing url: " + url);
+
+	return new Promise( (resolve, reject) => {
+		textapi.summarize({
+			url: url,
+			sentences_number: numberOfSentences
+		}, function(error, response) {
+			if (error === null) {
+		    	resolve(response);
+		  	} else {
+		  		console.log('text api error: ' + error);
+		  	};
+		});
+
+	});
+
+}
+app.get('/summarize', (req, res) => {
+	const {url} = req.query;
+	
+	getArticleSummary(url, 5)
+
+	.then(function(response) {
+		res.send(response);
+	})
+	.catch(function() {
+		res.send('failed');
+	});
+	
+});
 
 app.listen(8080, err => {
 	console.log('app is listening on 8080');
