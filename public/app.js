@@ -8,8 +8,9 @@ function generateTwitterTimeline(username) {
 	return `
 		<a class="twitter-timeline"
 		  href="https://twitter.com/${username}"
-		  data-width="300"
-		  data-height="400">
+		  data-width="200"
+		  data-height="200"
+		  data-chrome="nofooter noheader" >
 		  Tweets by @${username}
 		</a>`;
 
@@ -23,10 +24,15 @@ function generateNewsItems(newsResults, pageNumber) {
      	<div class="articles">
      		${newsResults.articles.slice(pageNumber - 1, pageNumber + 4).map( article => {
      			return `<div class="article">
-     						${article.title}
+     						<img src="${article.urlToImage}" />
+     						<a class="title" href="${article.url}">
+     							${article.title}
+     						</a>
+     						<button class="summarize">Summarize
+     						</button>
      					</div>
      			`
-     		})}
+     		}).join('')}
      	</div>
      	`;
 }
@@ -35,27 +41,20 @@ function generateDepartmentString(departments) {
 	return departments.map( (department, index) => {
 		return `
 		<div class="department">
-			<div class="department-news">
-				<div class="department-news-content">
-					<div class="department-header">
-						<img class="department-seal" src="${department.seal}" />
-						<div class="department-name">${department.name}</div>
-
-						<div class="department-administrator">
-							<img class="department-administrator-img" src="${department.administrator.imgUrl}" />
-							<span class="department-administrator-title">${department.administrator.title}</span>
-							<span class="department-administrator-name">${department.administrator.name}</span>
-						</div>
-					</div>
-
-					<div class="department-news-feed">${generateNewsItems(department.newsResults, department.newsPageNumber)}</div>
-
+				
+				<div class="department-header">
+					<img class="department-seal" src="${department.seal}" />
+					<div class="department-name">${department.name}</div>
 				</div>
+
+				<div class="department-news">
+					<div class="department-news-container">${generateNewsItems(department.newsResults, department.newsPageNumber)}</div>
+					<div class="department-tweets-container">
+						<div class="department-tweets">${generateTwitterTimeline(department.twitterUsername)}</div>
+					</div>
+				</div>
+
 			</div>
-
-			<div class="department-tweets">${generateTwitterTimeline(department.twitterUsername)}</div>
-
-			<div class="department-administrator-tweets">${generateTwitterTimeline(department.administrator.twitterUsername)}</div>
 		</div>`
 	})
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
@@ -70,6 +69,11 @@ function summarizeArticle(url) {
 	    });
 }
 
+function handleSummaryClick() {
+	$('main').on('click', '.summarize', function(event) {
+		console.log('summarize');
+	});
+}
 function renderDepartments(state) {
  	const req = new Request('/departments');
 
@@ -91,10 +95,11 @@ function renderDepartments(state) {
 function handleEvents() {
 
     renderDepartments(state);
-    summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
-    	.then(function(summary) {
-    		console.log(summary);
-    	});
+    handleSummaryClick();
+    // summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
+    // 	.then(function(summary) {
+    // 		console.log(summary);
+    // 	});
 
 }
 
