@@ -16,6 +16,7 @@ function generateTwitterTimeline(username) {
 
 }
 function generateNewsItems(newsResults, pageNumber) {
+
 	return `
 		<div class="news-results-header">
         	${newsResults.totalResults} results
@@ -24,12 +25,18 @@ function generateNewsItems(newsResults, pageNumber) {
      	<div class="articles">
      		${newsResults.articles.slice(pageNumber - 1, pageNumber + 4).map( article => {
      			return `<div class="article">
-     						<img src="${article.urlToImage}" />
-     						<a class="title" href="${article.url}">
-     							${article.title}
-     						</a>
-     						<button class="summarize">Summarize
-     						</button>
+     						<div class="image-container">
+     							<img src="${article.urlToImage ? article.urlToImage : 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'}" />
+     						</div>
+
+     						<div class="title-container">
+	     						<a class="title" href="${article.url}">
+	     							${article.title}
+	     						</a>
+	     						- ${article.source.name}
+	     						<button class="summarize">Summarize
+	     						</button>
+	     					</div>
      					</div>
      			`
      		}).join('')}
@@ -60,21 +67,40 @@ function generateDepartmentString(departments) {
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
 }
 
+function renderSummary(summary) {
+	console.log(summary);
+}
+
 function summarizeArticle(url) {
-	const req = new Request('/summarize/?' + `url=${url}`);
+	const req = new Request(`/summarize/?url=${url}`);
 
 	return fetch(req)
 	    .then(function(response) {
+	    	console.log(response);
+	    	if (response.status === 400) {
+	    		throw new Error(response.statusText);
+	    	}
 	        return response.json();
+	    })
+	    .then(function(summary) {
+	    	renderSummary(summary);
+	    })
+	    .catch(function(error) {
+	    	console.log('error: ' , error);
 	    });
 }
 
 function handleSummaryClick() {
 	$('main').on('click', '.summarize', function(event) {
 		console.log('summarize');
+		summarizeArticle('not a good url');
 	});
 }
+
 function renderDepartments(state) {
+	$('main').html(generateDepartmentString(state.departments));
+}
+function getDepartments(state) {
  	const req = new Request('/departments');
 
 	fetch(req)
@@ -84,17 +110,14 @@ function renderDepartments(state) {
 
     .then(function(response) {
          state.departments = response;
-    })
-
- 	.then(function() {
- 		console.log(state.departments);
- 		$('main').html(generateDepartmentString(state.departments));
-	});
+         console.log(state.departments);
+         renderDepartments(state);
+    });
 }
 
 function handleEvents() {
 
-    renderDepartments(state);
+    getDepartments(state);
     handleSummaryClick();
     // summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
     // 	.then(function(summary) {

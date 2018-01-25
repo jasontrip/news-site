@@ -35,7 +35,9 @@ body {
 }
 
 .article {
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+	display: block;
+	overflow: hidden;
 }
 
 .summarize {
@@ -72,21 +74,30 @@ body {
 	visibility: visible;
 }
 
-.article img {
-	max-width: 75px;
-	float: left;
+.article .image-container {
+	min-width: 50px;
+	max-width: 50px;
+	max-height: 50px;
 	margin-right: 15px;
+	float: left;
 }
 
-.department-news-feed a:link, a:visited {
+.article img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.article .title-container {
+	max-width: 375px;
+	float: left;
+	vertical-align: middle;
+}
+
+.department-news-container a:link, a:visited {
 	text-decoration: none;
 	color: #444;
 }
-.department-news-feed a:hover {
+.department-news-container a:hover {
 	text-decoration: underline;
-}
-.department .article {
-	margin-top: 7px;
 }
 
 .department-tweets {
@@ -94,6 +105,14 @@ body {
 	max-height: 200px;
 }
 
+
+
+.department-header {
+	padding: 10px;
+	background-color: rgb(53, 78, 117);
+	color: white;
+
+}
 .department-seal {
 	width: 40px;
 	display: inline-block;
@@ -104,23 +123,4 @@ body {
 	font-weight: bold;
 	font-size: 24px;
 	display: inline-block;
-}
-
-.department-header {
-	padding: 10px;
-	background-color: rgb(53, 78, 117);
-	color: white;
-
-}
-.department-administrator {
-	padding-bottom: 10px;
-	display: inline-block;
-}
-.department-administrator-img {
-	margin-left: 30px;
-	max-width: 20px;
-	vertical-align: middle;
-}
-.department-administrator-name, .department-administrator-title {
-	font-size: 10px;
 }
