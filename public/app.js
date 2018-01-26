@@ -34,7 +34,11 @@ function generateNewsItems(newsResults, pageNumber) {
 	     							${article.title}
 	     						</a>
 	     						- ${article.source.name}
-	     						<button class="summarize">Summarize
+	     						<button class="summarize"
+	     								data-url="${article.url}"
+	     								data-title="${article.title}"
+	     								data-urltoimage="${article.urlToImage ? article.urlToImage : 'none'}">
+	     							Summarize
 	     						</button>
 	     					</div>
      					</div>
@@ -67,11 +71,32 @@ function generateDepartmentString(departments) {
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
 }
 
-function renderSummary(summary) {
-	console.log(summary);
+function generateSentencesString(sentences) {
+	return sentences.map( sentence => {
+		return `
+			<li class="summary-sentence">${sentence}</li>
+		`
+	}).join('');
+}
+function generateSummaryString(summary, urlToImage) {
+	return `
+		<img src="${urlToImage}" class="summary-img" />
+		<div class="summary-sentences">
+			<ul>${generateSentencesString(summary.sentences)}</ul>
+		</div>
+	`
+}
+function renderSummary(summary, urlToImage) {
+	console.log(summary.sentences);
+
+	$('.summary').html(generateSummaryString(summary, urlToImage));
+	$('.summary-window').show();
+	
 }
 
-function summarizeArticle(url) {
+function summarizeArticle(url, urlToImage) {
+	console.log('urlToImage' + urlToImage);
+
 	const req = new Request(`/summarize/?url=${url}`);
 
 	return fetch(req)
@@ -83,7 +108,7 @@ function summarizeArticle(url) {
 	        return response.json();
 	    })
 	    .then(function(summary) {
-	    	renderSummary(summary);
+	    	renderSummary(summary, urlToImage);
 	    })
 	    .catch(function(error) {
 	    	console.log('error: ' , error);
@@ -92,14 +117,25 @@ function summarizeArticle(url) {
 
 function handleSummaryClick() {
 	$('main').on('click', '.summarize', function(event) {
-		console.log('summarize');
-		summarizeArticle('not a good url');
+		console.log('summarize: ' + $(this).data('url'))
+		$('.summary-title').html(`${$(this).data('title')}`);
+		$('.summary').html('summarizing...');
+		$('.summary-window').show();
+
+		summarizeArticle($(this).data('url'), $(this).data('urltoimage'));
+	});
+}
+
+function handleCloseSummaryClick() {
+	$('.summary-window').on('click', '.close-summary', function(event) {
+		$('.summary-window').hide();
 	});
 }
 
 function renderDepartments(state) {
 	$('main').html(generateDepartmentString(state.departments));
 }
+
 function getDepartments(state) {
  	const req = new Request('/departments');
 
@@ -119,6 +155,7 @@ function handleEvents() {
 
     getDepartments(state);
     handleSummaryClick();
+    handleCloseSummaryClick();
     // summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
     // 	.then(function(summary) {
     // 		console.log(summary);

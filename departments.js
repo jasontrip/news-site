@@ -1,7 +1,7 @@
 module.exports = [
 	{name: "Department of State",
 	 seal: "img/seal_department_of_state.png",
-	 searchTerms: ["Department of State", "Rex Tillerson"],
+	 searchTerms: ['"Department of State"', '"Rex Tillerson"'],
 	 newsResults: [],
 	 newsPageNumber: 1,
 	 twitterUsername: 'StateDept',
@@ -14,7 +14,7 @@ module.exports = [
 	},
 	{name: "Department of Treasury",
 	 seal: "img/seal_department_of_treasury.png",
-	 searchTerms: ["Department of Treasury"],
+	 searchTerms: ['"Department of Treasury"', '"Steve Mnuchin"'],
 	 newsResults: [],
 	 newsPageNumber: 1,
 	 twitterUsername: 'USTreasury',

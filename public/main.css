@@ -124,3 +124,36 @@ body {
 	font-size: 24px;
 	display: inline-block;
 }
+
+.summary-window {
+	position: fixed;
+	top: 0;
+	right: 0;
+	min-width: 350px;
+	max-width: 400px;
+}
+
+.summary-header {
+	background-color: orange;
+	height: 45px;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.summary-nav {
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+.summary {
+	font-size: 11px;
+	background:rgba(252, 156, 2, 0.95);
+	padding: 10px;
+}
+.summary-img {
+	max-width: 300px;
+	max-height: 200px;
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}

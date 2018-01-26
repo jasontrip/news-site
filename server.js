@@ -81,8 +81,9 @@ function getNewsItems(departments, promises) {
 
 	for (let i = 0; i < departments.length; i++) {
 		newsapi.v2.everything({
-			q: departments[i].searchTerms,
-			language: 'en'
+			q: departments[i].searchTerms.join(" OR "),
+			language: 'en',
+			from: formatDateForNewsApi(new Date())
 		})
 		.then(function(response) {
 			departments[i].newsResults = response;
