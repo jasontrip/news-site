@@ -9,8 +9,8 @@ function generateTwitterTimeline(username) {
 		<a class="twitter-timeline"
 		  href="https://twitter.com/${username}"
 		  data-width="200"
-		  data-height="200"
-		  data-chrome="nofooter noheader" >
+		  data-height="250"
+		  data-chrome="nofooter noheader noborder" >
 		  Tweets by @${username}
 		</a>`;
 
@@ -61,7 +61,7 @@ function generateDepartmentString(departments) {
 				<div class="department-news">
 					<div class="department-news-container">${generateNewsItems(department.newsResults, department.newsPageNumber)}</div>
 					<div class="department-tweets-container">
-						<div class="department-tweets">${generateTwitterTimeline(department.twitterUsername)}</div>
+						${generateTwitterTimeline(department.twitterUsername)}
 					</div>
 				</div>
 
@@ -118,7 +118,7 @@ function summarizeArticle(url, urlToImage) {
 function handleSummaryClick() {
 	$('main').on('click', '.summarize', function(event) {
 		console.log('summarize: ' + $(this).data('url'))
-		$('.summary-title').html(`${$(this).data('title')}`);
+		$('.summary-title').html(`<a target="_blank" href="${$(this).data('url')}">${$(this).data('title')}</a>`);
 		$('.summary').html('summarizing...');
 		$('.summary-window').show();
 
