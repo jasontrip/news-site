@@ -31,9 +31,8 @@ function generateNewsItems(newsResults, pageNumber) {
 
      						<div class="title-container">
 	     						<a class="title" href="${article.url}">
-	     							${article.title}
-	     						</a>
-	     						- ${article.source.name}
+	     							${article.title} - ${article.source.name}
+	     						</a><br />
 	     						<button class="summarize"
 	     								data-url="${article.url}"
 	     								data-title="${article.title}"
