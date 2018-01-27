@@ -12,9 +12,10 @@ const textapi = new AYLIENTextAPI({
 	application_key: process.env.AYLIEN_TEXT_API_KEY
 });
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
+const NEWS_API_URL = 'https://newsapi.org/v2/everything?';
 
 const DEPARTMENTS = require('./departments');
-const NEWS_API_URL = 'https://newsapi.org/v2/everything?';
+const utility = require('./utility');
 
 app.use(express.static('public'));
 
@@ -22,85 +23,20 @@ app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/departments', (req, res) => {
 
-function getTwitterTimelines(departments, promises) {
-
-	for (let i=0; i < departments.length; i++) {
-		promises.push(
-			new Promise((resolve, reject) => {
- 				request(assembleNewsApiUrl(NEWS_API_URL, departments[i]), function (error, response, body) {
-					departments[i].twitterTimeline = JSON.parse(body).articles;
-					resolve();
-				});
-			})
-		)
-	}
-
-}
-function formatDateForNewsApi(date) {
-	let dd = date.getDate();
-	let mm = date.getMonth() + 1;
-	const yyyy = date.getFullYear();
-
-	if (dd < 10) {
-	    dd = '0' + dd;
-	} 
-	if (mm < 10) {
-	    mm = '0' + mm;
-	} 
-	
-	return yyyy + '-' + mm + '-' + dd;
-}
-
-function assembleNewsApiUrl(baseUrl, department) {
-	console.log(encodeURI(baseUrl +
-			'q=' + department.searchTerms.map(term => `"${term}"`).join(' OR ') +
-			'from=' + formatDateForNewsApi(new Date()) + '&' +
-	        'sortBy=popularity&' +
-	        `apiKey=${process.env.NEWS_API_KEY}`));
-
-	return encodeURI(baseUrl +
-			'q=' + department.searchTerms.map(term => `"${term}"`).join(' OR ') +
-			'from=' + formatDateForNewsApi(new Date()) + '&' +
-	        'sortBy=popularity&' +
-	        `apiKey=${process.env.NEWS_API_KEY}`);
-}
-
-function getNewsItems(departments, promises) {
-
-	// for (let i = 0; i < departments.length; i++) {
-	// 	promises.push(
-	// 		new Promise((resolve, reject) => {
- // 				request(assembleNewsApiUrl(NEWS_API_URL, departments[i]), function (error, response, body) {
-	// 				departments[i].newsResults = JSON.parse(body);
-	// 				resolve();
-	// 			});
-	// 		})
-	// 	)
-	// }
-
-	for (let i = 0; i < departments.length; i++) {
+	for (let i = 0; i < DEPARTMENTS.length; i++) {
 		newsapi.v2.everything({
-			q: departments[i].searchTerms.join(" OR "),
+			q: DEPARTMENTS[i].searchTerms.join(" OR "),
 			language: 'en',
-			from: formatDateForNewsApi(new Date())
+			from: utility.formatDateForNewsApi(new Date())
 		})
 		.then(function(response) {
-			departments[i].newsResults = response;
+			DEPARTMENTS[i].newsResults = response;
 		})
 	}
 
-}
-app.get('/departments', (req, res) => {
-	const promises = [];
-
-	getNewsItems(DEPARTMENTS, promises);
-	getTwitterTimelines(DEPARTMENTS, promises);
-
-	Promise.all(promises)
-		.then( () => {
-			res.json(DEPARTMENTS);
-		});
+	res.json(DEPARTMENTS);
 
 });
 

@@ -18,12 +18,8 @@ function generateTwitterTimeline(username) {
 function generateNewsItems(newsResults, pageNumber) {
 
 	return `
-		<div class="news-results-header">
-        	${newsResults.totalResults} results
-     	</div>` +
-     	`
      	<div class="articles">
-     		${newsResults.articles.slice(pageNumber - 1, pageNumber + 4).map( article => {
+     		${newsResults.articles.slice(pageNumber * 5 - 5, pageNumber * 5 - 1).map( article => {
      			return `<div class="article">
      						<div class="image-container">
      							<img src="${article.urlToImage ? article.urlToImage : 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'}" />
@@ -47,6 +43,16 @@ function generateNewsItems(newsResults, pageNumber) {
      	`;
 }
 
+function generateNewsHeaderString(department) {
+	return `
+		<div class="news-results-header">
+        	${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5} of ${department.newsResults.totalResults} articles
+        	<button class="next-page">next page</button>
+        	<button class="previous-page">previous-page</button>
+     	</div>
+     `;
+}
+
 function generateDepartmentString(departments) {
 	return departments.map( (department, index) => {
 		return `
@@ -58,7 +64,10 @@ function generateDepartmentString(departments) {
 				</div>
 
 				<div class="department-news">
-					<div class="department-news-container">${generateNewsItems(department.newsResults, department.newsPageNumber)}</div>
+					<div class="department-news-container">
+						${generateNewsHeaderString(department)}
+						${generateNewsItems(department.newsResults, department.newsPageNumber)}
+					</div>
 					<div class="department-tweets-container">
 						${generateTwitterTimeline(department.twitterUsername)}
 					</div>
@@ -131,6 +140,14 @@ function handleCloseSummaryClick() {
 	});
 }
 
+function handleNextPageClick() {
+
+}
+
+function handlePreviousPageClick() {
+
+}
+
 function renderDepartments(state) {
 	$('main').html(generateDepartmentString(state.departments));
 }
@@ -155,6 +172,8 @@ function handleEvents() {
     getDepartments(state);
     handleSummaryClick();
     handleCloseSummaryClick();
+    handleNextPageClick();
+    handlePreviousPageClick();
     // summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
     // 	.then(function(summary) {
     // 		console.log(summary);
