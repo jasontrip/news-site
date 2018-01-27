@@ -1,8 +1,14 @@
 'use strict';
-
+const IMG_ERROR_URL = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'
 const state = {
 	departments: []
 };
+
+function imgError(image) {
+    image.onerror = "";
+    image.src = IMG_ERROR_URL;
+    return true;
+}
 
 function generateTwitterTimelineString(username) {
 	return `
@@ -18,9 +24,16 @@ function generateTwitterTimelineString(username) {
 function generateNewsHeaderString(department, index) {
 	return `
 		<div class="news-results-header">
-        	${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5} of ${department.newsResults.totalResults} articles
-        	<button class="next-page" data-department-index=${index}>next page</button>
-        	<button class="previous-page" data-department-index=${index}>previous-page</button>
+			<button class="previous-page"
+        		data-department-index=${index}
+        		${department.newsPageNumber === 1 ? 'disabled' : ''}>
+        				<
+        	</button>
+        	<div class="result-count">
+        		${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5}
+        		of ${department.newsResults.totalResults}
+        	</div>
+        	<button class="next-page" data-department-index=${index}>></button>
      	</div>
      `;
 }
@@ -31,11 +44,11 @@ function generateNewsItems(newsResults, pageNumber) {
      		${newsResults.articles.slice(pageNumber * 5 - 5, pageNumber * 5).map( article => {
      			return `<div class="article">
      						<div class="image-container">
-     							<img src="${article.urlToImage ? article.urlToImage : 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'}" />
+     							<img src="${article.urlToImage ? article.urlToImage : IMG_ERROR_URL}" onerror="imgError(this);" />
      						</div>
 
      						<div class="title-container">
-	     						<a class="title" href="${article.url}">
+	     						<a class="title" href="${article.url}" onErr>
 	     							${article.title} - ${article.source.name}
 	     						</a><br />
 	     						<button class="summarize"
@@ -83,7 +96,7 @@ function generateDepartmentString(departments) {
 
 function generateSummaryString(summary, urlToImage) {
 	return `
-		<img src="${urlToImage}" class="summary-img" />
+		<img src="${urlToImage}" onerror="imgError(this);" class="summary-img" />
 		<div class="summary-sentences">
 			<ul>${summary.sentences
 					.map( sentence => {

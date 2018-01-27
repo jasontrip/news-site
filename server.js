@@ -61,6 +61,6 @@ app.get('/summarize', (req, res) => {
 	
 });
 
-app.listen(8080, err => {
+app.listen(process.env.PORT || 8080, err => {
 	console.log('app is listening on 8080');
 });
