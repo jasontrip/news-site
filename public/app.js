@@ -4,22 +4,31 @@ const state = {
 	departments: []
 };
 
-function generateTwitterTimeline(username) {
+function generateTwitterTimelineString(username) {
 	return `
 		<a class="twitter-timeline"
 		  href="https://twitter.com/${username}"
 		  data-width="200"
 		  data-height="250"
-		  data-chrome="nofooter noheader noborder" >
+		  data-chrome="nofooter noheader" >
 		  Tweets by @${username}
 		</a>`;
 
+}
+function generateNewsHeaderString(department) {
+	return `
+		<div class="news-results-header">
+        	${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5} of ${department.newsResults.totalResults} articles
+        	<button class="next-page">next page</button>
+        	<button class="previous-page">previous-page</button>
+     	</div>
+     `;
 }
 function generateNewsItems(newsResults, pageNumber) {
 
 	return `
      	<div class="articles">
-     		${newsResults.articles.slice(pageNumber * 5 - 5, pageNumber * 5 - 1).map( article => {
+     		${newsResults.articles.slice(pageNumber * 5 - 5, pageNumber * 5).map( article => {
      			return `<div class="article">
      						<div class="image-container">
      							<img src="${article.urlToImage ? article.urlToImage : 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'}" />
@@ -42,15 +51,9 @@ function generateNewsItems(newsResults, pageNumber) {
      	</div>
      	`;
 }
-
-function generateNewsHeaderString(department) {
-	return `
-		<div class="news-results-header">
-        	${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5} of ${department.newsResults.totalResults} articles
-        	<button class="next-page">next page</button>
-        	<button class="previous-page">previous-page</button>
-     	</div>
-     `;
+function generateNewsString(department) {
+	return generateNewsHeaderString(department) +
+		   generateNewsItems(department.newsResults, department.newsPageNumber);
 }
 
 function generateDepartmentString(departments) {
@@ -65,11 +68,10 @@ function generateDepartmentString(departments) {
 
 				<div class="department-news">
 					<div class="department-news-container">
-						${generateNewsHeaderString(department)}
-						${generateNewsItems(department.newsResults, department.newsPageNumber)}
+						${generateNewsString(department)}
 					</div>
 					<div class="department-tweets-container">
-						${generateTwitterTimeline(department.twitterUsername)}
+						${generateTwitterTimelineString(department.twitterUsername)}
 					</div>
 				</div>
 
@@ -79,18 +81,17 @@ function generateDepartmentString(departments) {
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
 }
 
-function generateSentencesString(sentences) {
-	return sentences.map( sentence => {
-		return `
-			<li class="summary-sentence">${sentence}</li>
-		`
-	}).join('');
-}
 function generateSummaryString(summary, urlToImage) {
 	return `
 		<img src="${urlToImage}" class="summary-img" />
 		<div class="summary-sentences">
-			<ul>${generateSentencesString(summary.sentences)}</ul>
+			<ul>${summary.sentences
+					.map( sentence => {
+					return `<li class="summary-sentence">${sentence}</li>`
+					})
+					.join('')
+				}
+			</ul>
 		</div>
 	`
 }
@@ -103,24 +104,24 @@ function renderSummary(summary, urlToImage) {
 }
 
 function summarizeArticle(url, urlToImage) {
-	console.log('urlToImage' + urlToImage);
 
 	const req = new Request(`/summarize/?url=${url}`);
 
+	console.log('summarizing article');
 	return fetch(req)
-	    .then(function(response) {
-	    	console.log(response);
-	    	if (response.status === 400) {
-	    		throw new Error(response.statusText);
-	    	}
-	        return response.json();
-	    })
-	    .then(function(summary) {
-	    	renderSummary(summary, urlToImage);
-	    })
-	    .catch(function(error) {
-	    	console.log('error: ' , error);
-	    });
+			    .then(function(response) {
+			    	if (response.status === 400) {
+			    		console.log('error occurred');
+			    		throw new Error(response.statusText);
+			    	}
+			        return response.json();
+			    })
+			    .then(function(summary) {
+			    	renderSummary(summary, urlToImage);
+			    })
+			    .catch(function(error) {
+			    	console.log('error: ' , error);
+			    });
 }
 
 function handleSummaryClick() {
@@ -141,10 +142,16 @@ function handleCloseSummaryClick() {
 }
 
 function handleNextPageClick() {
+	$('main').on('click', 'button.next-page', function(event) {
+		console.log();
+	});
 
 }
 
 function handlePreviousPageClick() {
+	$('main').on('click', 'button.previous-page', function(event) {
+		console.log('previous-page')
+	});
 
 }
 
@@ -156,15 +163,15 @@ function getDepartments(state) {
  	const req = new Request('/departments');
 
 	fetch(req)
-    .then(function(response) {
-        return response.json();
-    })
+	    .then(function(response) {
+	        return response.json();
+	    })
 
-    .then(function(response) {
-         state.departments = response;
-         console.log(state.departments);
-         renderDepartments(state);
-    });
+	    .then(function(response) {
+	         state.departments = response;
+	         console.log(state.departments);
+	         renderDepartments(state);
+	    });
 }
 
 function handleEvents() {
@@ -174,12 +181,7 @@ function handleEvents() {
     handleCloseSummaryClick();
     handleNextPageClick();
     handlePreviousPageClick();
-    // summarizeArticle('https://www.wired.com/story/free-money-the-surprising-effects-of-a-basic-income-supplied-by-government/')
-    // 	.then(function(summary) {
-    // 		console.log(summary);
-    // 	});
 
 }
 
-// is this a JQuery function?
 $(handleEvents());
