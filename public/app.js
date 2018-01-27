@@ -15,12 +15,12 @@ function generateTwitterTimelineString(username) {
 		</a>`;
 
 }
-function generateNewsHeaderString(department) {
+function generateNewsHeaderString(department, index) {
 	return `
 		<div class="news-results-header">
         	${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5} of ${department.newsResults.totalResults} articles
-        	<button class="next-page">next page</button>
-        	<button class="previous-page">previous-page</button>
+        	<button class="next-page" data-department-index=${index}>next page</button>
+        	<button class="previous-page" data-department-index=${index}>previous-page</button>
      	</div>
      `;
 }
@@ -51,15 +51,15 @@ function generateNewsItems(newsResults, pageNumber) {
      	</div>
      	`;
 }
-function generateNewsString(department) {
-	return generateNewsHeaderString(department) +
+function generateNewsString(department, index) {
+	return generateNewsHeaderString(department, index) +
 		   generateNewsItems(department.newsResults, department.newsPageNumber);
 }
 
 function generateDepartmentString(departments) {
 	return departments.map( (department, index) => {
 		return `
-		<div class="department">
+		<div class="department" id="${index}">
 				
 				<div class="department-header">
 					<img class="department-seal" src="${department.seal}" />
@@ -68,7 +68,7 @@ function generateDepartmentString(departments) {
 
 				<div class="department-news">
 					<div class="department-news-container">
-						${generateNewsString(department)}
+						${generateNewsString(department, index)}
 					</div>
 					<div class="department-tweets-container">
 						${generateTwitterTimelineString(department.twitterUsername)}
@@ -143,14 +143,23 @@ function handleCloseSummaryClick() {
 
 function handleNextPageClick() {
 	$('main').on('click', 'button.next-page', function(event) {
-		console.log();
+		const departmentIndex = $(this).data('department-index');
+		state.departments[departmentIndex].newsPageNumber++;
+
+		$('.department#' + departmentIndex + ' .department-news-container')
+			.html(generateNewsString(state.departments[departmentIndex], departmentIndex));
+
 	});
 
 }
 
 function handlePreviousPageClick() {
 	$('main').on('click', 'button.previous-page', function(event) {
-		console.log('previous-page')
+		const departmentIndex = $(this).data('department-index');
+		state.departments[departmentIndex].newsPageNumber--;
+
+		$('.department#' + departmentIndex + ' .department-news-container')
+			.html(generateNewsString(state.departments[departmentIndex], departmentIndex));
 	});
 
 }
