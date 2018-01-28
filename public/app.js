@@ -14,8 +14,8 @@ function generateTwitterTimelineString(username) {
 	return `
 		<a class="twitter-timeline"
 		  href="https://twitter.com/${username}"
-		  data-width="200"
-		  data-height="250"
+		  data-width="250"
+		  data-height="350"
 		  data-chrome="nofooter noheader" >
 		  Tweets by @${username}
 		</a>`;
@@ -49,8 +49,10 @@ function generateNewsItems(newsResults, pageNumber) {
 
      						<div class="title-container">
 	     						<a class="title" href="${article.url}" onErr>
-	     							${article.title} - ${article.source.name}
-	     						</a><br />
+	     							${article.title}
+	     						</a>
+	     						<span class="news-source">- ${article.source.name}</span>
+	     						<br />
 	     						<button class="summarize"
 	     								data-url="${article.url}"
 	     								data-title="${article.title}"
@@ -75,8 +77,10 @@ function generateDepartmentString(departments) {
 		<div class="department" id="${index}">
 				
 				<div class="department-header">
-					<img class="department-seal" src="${department.seal}" />
-					<div class="department-name">${department.name}</div>
+					<div class="department-title">
+						<img class="department-seal" src="${department.seal}" />
+						<div class="department-name">${department.name}</div>
+					</div>
 				</div>
 
 				<div class="department-news">
