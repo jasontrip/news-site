@@ -55,7 +55,10 @@ function generateNewsItems(newsResults, pageNumber) {
 
      						<div class="title-container">
 	     						<a class="title" href="${article.url}" onErr>${article.title}</a>
-	     						<span class="news-source"> - ${article.source.name}</span>
+	     						<span class="news-source">
+	     							- ${article.source.name}
+	     							${article.publishedAt}
+	     						</span>
 	     						<br />
 	     						<button class="get-sentiment"
 	     								data-url="${article.url}">

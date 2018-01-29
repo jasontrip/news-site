@@ -24,6 +24,8 @@ app.get('/', (req, res) => {
 
 app.get('/departments', (req, res) => {
 
+	let count = 0;
+
 	for (let i = 0; i < DEPARTMENTS.length; i++) {
 		newsapi.v2.everything({
 			q: DEPARTMENTS[i].searchTerms.join(" OR "),
@@ -32,11 +34,16 @@ app.get('/departments', (req, res) => {
 			pageSize: 100
 		})
 		.then(function(response) {
+			response.articles.forEach( article => {
+				article.publishedAt = moment(article.publishedAt).fromNow();
+			});
 			DEPARTMENTS[i].newsResults = response;
+			count++;
+			if (count === DEPARTMENTS.length) {
+				res.json(DEPARTMENTS);
+			}
 		})
 	}
-
-	res.json(DEPARTMENTS);
 
 });
 
