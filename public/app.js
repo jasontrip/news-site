@@ -1,5 +1,5 @@
 'use strict';
-const IMG_ERROR_URL = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest?cb=20170129011325'
+const IMG_ERROR_URL = '/img/img_not_available.png';
 const state = {
 	departments: []
 };
@@ -48,10 +48,8 @@ function generateNewsItems(newsResults, pageNumber) {
      						</div>
 
      						<div class="title-container">
-	     						<a class="title" href="${article.url}" onErr>
-	     							${article.title}
-	     						</a>
-	     						<span class="news-source">- ${article.source.name}</span>
+	     						<a class="title" href="${article.url}" onErr>${article.title}</a>
+	     						<span class="news-source"> - ${article.source.name}</span>
 	     						<br />
 	     						<button class="summarize"
 	     								data-url="${article.url}"

@@ -20,10 +20,10 @@ body {
 	margin-bottom: 15px;
 }
 .department-title {
-	margin-top: 30px;
+	margin-top: 20px;
 }
 .department-seal {
-	width: 40px;
+	width: 80px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 10px;
@@ -33,6 +33,10 @@ body {
 	font-size: 24px;
 	display: inline-block;
 	vertical-align: middle;
+}
+.administrator-headshot {
+	width: 30px;
+	border-radius: 30%;
 }
 
 .department-news {
