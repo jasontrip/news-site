@@ -5,6 +5,7 @@ const express = require('express');
 const request = require('request');
 const AYLIENTextAPI = require('aylien_textapi');
 const NewsAPI = require('newsapi');
+const moment = require('moment');
 
 const app = express();
 const textapi = new AYLIENTextAPI({
@@ -12,10 +13,8 @@ const textapi = new AYLIENTextAPI({
 	application_key: process.env.AYLIEN_TEXT_API_KEY
 });
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
-const NEWS_API_URL = 'https://newsapi.org/v2/everything?';
 
 const DEPARTMENTS = require('./departments');
-const utility = require('./utility');
 
 app.use(express.static('public'));
 
@@ -29,7 +28,7 @@ app.get('/departments', (req, res) => {
 		newsapi.v2.everything({
 			q: DEPARTMENTS[i].searchTerms.join(" OR "),
 			language: 'en',
-			from: utility.formatDateForNewsApi(new Date()),
+			from: moment().format('YYYY-MM-DD'),
 			pageSize: 100
 		})
 		.then(function(response) {
