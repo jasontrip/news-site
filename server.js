@@ -29,7 +29,8 @@ app.get('/departments', (req, res) => {
 		newsapi.v2.everything({
 			q: DEPARTMENTS[i].searchTerms.join(" OR "),
 			language: 'en',
-			from: utility.formatDateForNewsApi(new Date())
+			from: utility.formatDateForNewsApi(new Date()),
+			pageSize: 100
 		})
 		.then(function(response) {
 			DEPARTMENTS[i].newsResults = response;
@@ -39,6 +40,25 @@ app.get('/departments', (req, res) => {
 	res.json(DEPARTMENTS);
 
 });
+
+app.get('/sentiment', (req, res) => {
+	const {url} = req.query;
+	console.log('getting sentiment for ' + url);
+
+	textapi.sentiment({
+		url: url,
+		mode: 'document',
+		language: 'en'
+	}, function(error, response) {
+		if (error === null) {
+	    	res.send(response);
+	  	} else {
+	  		console.log('text api error: ' , error );
+	  		res.status(400).send(error);
+	  	};
+	});
+
+})
 
 app.get('/summarize', (req, res) => {
 	

@@ -30,10 +30,16 @@ function generateNewsHeaderString(department, index) {
         				<
         	</button>
         	<div class="result-count">
-        		${department.newsPageNumber * 5 - 4} - ${department.newsPageNumber * 5}
+        		${department.newsPageNumber * 5 - 4} -
+        		${department.newsPageNumber * 5 > department.newsResults.totalResults
+        			? department.newsResults.totalResults : department.newsPageNumber * 5}
         		of ${department.newsResults.totalResults}
         	</div>
-        	<button class="next-page" data-department-index=${index}>></button>
+        	<button class="next-page"
+        		data-department-index=${index}
+        		${department.newsPageNumber * 5 >= department.newsResults.totalResults ? 'disabled' : ''}>
+        		>
+        	</button>
      	</div>
      `;
 }
@@ -51,6 +57,10 @@ function generateNewsItems(newsResults, pageNumber) {
 	     						<a class="title" href="${article.url}" onErr>${article.title}</a>
 	     						<span class="news-source"> - ${article.source.name}</span>
 	     						<br />
+	     						<button class="get-sentiment"
+	     								data-url="${article.url}">
+	     							Sentiment
+	     						</buton>
 	     						<button class="summarize"
 	     								data-url="${article.url}"
 	     								data-title="${article.title}"
@@ -118,6 +128,50 @@ function renderSummary(summary, urlToImage) {
 	
 }
 
+function getArticleSentiment(url, button) {
+
+	const req = new Request(`/sentiment/?url=${url}`);
+
+	return fetch(req)
+			    .then(function(response) {
+			    	if (response.status === 400) {
+			    		console.log('error occurred');
+			    		throw new Error(response.statusText);
+			    	}
+			        return response.json();
+			    })
+			    .then(function(sentiment) {
+			    	let sentimentEmoji = '';
+			    	switch (sentiment.polarity) {
+			    		case 'positive':
+			    			sentimentEmoji = '/img/positive_emoji.png';
+			    			break;
+			    		case 'neutral': 
+			    			sentimentEmoji = '/img/neutral_emoji.png';
+			    			break;
+			    		case 'negative':
+			    			sentimentEmoji = '/img/negative_emoji.png';
+			    			break;
+			    	}
+
+			    	$(button).html(`
+						<img class="emoji"
+				 		src="${sentimentEmoji}" />
+						<div class="emoji-text">${sentiment.polarity}</div>
+					`);
+					$(button).disabled = true;
+					// $(button).css({
+					// 	padding: 0,
+					// 	background: 'white',
+					// 	color: 'black',
+					// 	visibility: 'visible'
+					// });
+			    })
+			    .catch(function(error) {
+			    	console.log('error: ' , error);
+			    });
+}
+
 function summarizeArticle(url, urlToImage) {
 
 	const req = new Request(`/summarize/?url=${url}`);
@@ -178,6 +232,16 @@ function handlePreviousPageClick() {
 	});
 
 }
+function handleGetSentimentClick() {
+	$('main').on('click', '.get-sentiment', function (event) {
+		$(this).html('processing...');
+		$(this).toggleClass('get-sentiment');
+		$(this).toggleClass('got-sentiment');
+
+		getArticleSentiment($(this).data('url'), this);
+
+	})
+}
 
 function renderDepartments(state) {
 	$('main').html(generateDepartmentString(state.departments));
@@ -205,6 +269,7 @@ function handleEvents() {
     handleCloseSummaryClick();
     handleNextPageClick();
     handlePreviousPageClick();
+    handleGetSentimentClick();
 
 }
 

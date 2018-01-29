@@ -85,17 +85,24 @@ body {
 	border: 0;
 	font-size: 16px;
 	color: rgb(53, 78, 117);
+	width: 30px;
+	height: 25px;
+}
+.next-page:hover, .previous-page:hover {
+	border: 1px solid rgb(53, 78, 117);
 }
 .next-page:disabled, .previous-page:disabled {
 	color:#e0e0e0;
+	border: 0;
 }
 
+
 .article {
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 	display: block;
 	overflow: hidden;
 }
-.article:hover .summarize {
+.article:hover .summarize, .article:hover .get-sentiment {
 	visibility: visible;
 }
 
@@ -116,7 +123,7 @@ body {
 	max-width: 350px;
 }
 
-.summarize {
+.summarize, .get-sentiment {
 	background:rgba(252, 156, 2, 0.95);
 	font-size: 11px;
 	padding: 4px 6px 4px 6px;
@@ -126,13 +133,30 @@ body {
 	width: 75px;
 	border: 0;
 	float: left;
+	outline: none;
 }
-
-.summarize:hover {
+.got-sentiment {
+	font-size: 11px;
+	padding: 0;
+	text-decoration: none;
+	margin-left: 7px;
+	width: 75px;
+	border: 0;
+	float: left;
+	outline: none;
+}
+.summarize:hover, .get-sentiment:hover {
   text-decoration: none;
   color: white;
 }
-
+.emoji {
+	width: 20px;
+	float: left;
+}
+.emoji-text {
+	vertical-align: middle;
+	display: inline-block;
+}
 
 .summary-window {
 	position: fixed;
