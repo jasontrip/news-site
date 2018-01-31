@@ -37,7 +37,8 @@ function generateNewsHeaderString(department, index) {
         	</div>
         	<button class="next-page"
         		data-department-index=${index}
-        		${department.newsPageNumber * 5 >= department.newsResults.totalResults ? 'disabled' : ''}>
+        		${department.newsPageNumber * 5 >= department.newsResults.totalResults ||
+        			department.newsPageNumber * 5 >= 100 ? 'disabled' : ''}>
         		>
         	</button>
      	</div>
@@ -54,10 +55,10 @@ function generateNewsItems(newsResults, pageNumber) {
      						</div>
 
      						<div class="title-container">
-	     						<a class="title" href="${article.url}" onErr>${article.title}</a>
+	     						<a class="title" target="_blank" href="${article.url}">${article.title}</a>
+	     						<br />
 	     						<span class="news-source">
-	     							- ${article.source.name}
-	     							${article.publishedAt}
+	     							${article.source.name} | ${article.publishedAt}
 	     						</span>
 	     						<br />
 	     						<button class="get-sentiment"
@@ -90,7 +91,9 @@ function generateDepartmentString(departments) {
 				<div class="department-header">
 					<div class="department-title">
 						<img class="department-seal" src="${department.seal}" />
-						<div class="department-name">${department.name}</div>
+						<div class="department-name">
+							<a href="${department.website}" target="_blank">${department.name}</a>
+						</div>
 					</div>
 				</div>
 
@@ -163,12 +166,6 @@ function getArticleSentiment(url, button) {
 						<div class="emoji-text">${sentiment.polarity}</div>
 					`);
 					$(button).disabled = true;
-					// $(button).css({
-					// 	padding: 0,
-					// 	background: 'white',
-					// 	color: 'black',
-					// 	visibility: 'visible'
-					// });
 			    })
 			    .catch(function(error) {
 			    	console.log('error: ' , error);
@@ -237,7 +234,7 @@ function handlePreviousPageClick() {
 }
 function handleGetSentimentClick() {
 	$('main').on('click', '.get-sentiment', function (event) {
-		$(this).html('processing...');
+		$(this).html('<div class="emoji-text">processing...</div>');
 		$(this).toggleClass('get-sentiment');
 		$(this).toggleClass('got-sentiment');
 

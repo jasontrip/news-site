@@ -1,6 +1,7 @@
 module.exports = [
 	{name: "Department of State",
 	 seal: "img/seal_department_of_state.png",
+	 website: "https://www.state.gov/",
 	 searchTerms: ['"Department of State"', '"Rex Tillerson"'],
 	 newsResults: [],
 	 newsPageNumber: 1,
@@ -14,6 +15,7 @@ module.exports = [
 	},
 	{name: "Department of Treasury",
 	 seal: "img/seal_department_of_treasury.png",
+	 website: "https://home.treasury.gov/",
 	 searchTerms: ['"Department of Treasury"', '"Steve Mnuchin"'],
 	 newsResults: [],
 	 newsPageNumber: 1,

@@ -31,7 +31,8 @@ app.get('/departments', (req, res) => {
 			q: DEPARTMENTS[i].searchTerms.join(" OR "),
 			language: 'en',
 			from: moment().format('YYYY-MM-DD'),
-			pageSize: 100
+			pageSize: 100,
+			sortBy: 'publishedAt'
 		})
 		.then(function(response) {
 			response.articles.forEach( article => {
