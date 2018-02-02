@@ -304,7 +304,6 @@ function getDepartments(state) {
 	    .then(function(response) {
 	        return response.json();
 	    })
-
 	    .then(function(response) {
 	         state.departments = response;
 	         renderDepartments(state);

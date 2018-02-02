@@ -345,3 +345,22 @@ main {
 		margin-right: 30px;
 	}
 }
+
+footer {
+	height: 80px;
+	width: 100%;
+	background:rgba(252, 156, 2, 0.95);
+	padding: 20px;
+	font-size: 12px;
+	text-align: right;
+}
+footer .attribution {
+	margin-bottom: 2px;
+}
+footer a {
+	text-decoration: none;
+	color: inherit;
+}
+footer a:hover {
+	text-decoration: underline;
+}
