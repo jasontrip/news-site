@@ -103,14 +103,13 @@ function generateNavItemString(department, index) {
 	`;
 }
 function hamburgerClick(button) {
-    button.classList.toggle("change");
+	$(button).toggleClass("change");
 
-    const navList = document.getElementById("nav-list");
-    if (navList.style.display === "none" || navList.style.display === "") {
-        navList.style.display = "block";
-    } else {
-        navList.style.display = "none";
-    }
+    const navList = $("#nav-list");
+    
+    navList.css('display') === 'none'
+    	? navList.css('display', 'block')
+    	: navList.css('display', 'none');
 }
 
 function generateNavString(departments) {
