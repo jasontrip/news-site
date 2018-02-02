@@ -162,7 +162,6 @@ function generateDepartmentString(departments) {
 }
 
 function generateSummaryString(summary, urlToImage, title) {
-	console.log(summary);
 	return `
 		<img
 			src="${urlToImage}"
@@ -181,8 +180,6 @@ function generateSummaryString(summary, urlToImage, title) {
 	`
 }
 function renderSummary(summary, urlToImage, title) {
-	console.log(summary.sentences);
-
 	$('.summary').html(generateSummaryString(summary, urlToImage, title));
 	$('.summary-window').show();
 	
@@ -230,7 +227,6 @@ function summarizeArticle(url, urlToImage, title) {
 
 	const req = new Request(`/summarize/?url=${url}`);
 
-	console.log('summarizing article');
 	return fetch(req)
 			    .then(function(response) {
 			    	if (response.status === 400) {
@@ -250,9 +246,7 @@ function summarizeArticle(url, urlToImage, title) {
 function handleSummaryClick() {
 
 	$('main').on('click', '.summarize', function(event) {
-		console.log('summarize: ' + $(this).data('url'))
 		const {url, title, urltoimage} = $(this).data();
-		console.log(url + ' ' + title)
 		$('.summary-title').html(`<a target="_blank" href="${url}">${title}</a>`);
 		$('.summary').html('summarizing...');
 		$('.summary-window').show();
@@ -314,7 +308,6 @@ function getDepartments(state) {
 
 	    .then(function(response) {
 	         state.departments = response;
-	         console.log(state.departments);
 	         renderDepartments(state);
 	    });
 }
