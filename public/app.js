@@ -33,7 +33,7 @@ function generateNewsHeaderString(department, index) {
         		${department.newsPageNumber * 5 - 4} -
         		${department.newsPageNumber * 5 > department.newsResults.totalResults
         			? department.newsResults.totalResults : department.newsPageNumber * 5}
-        		of ${department.newsResults.totalResults}
+        		of ${department.newsResults.totalResults < 100 ? department.newsResults.totalResults : 100}
         	</div>
         	<button class="next-page"
         		data-department-index=${index}
@@ -51,7 +51,11 @@ function generateNewsItems(newsResults, pageNumber) {
      		${newsResults.articles.slice(pageNumber * 5 - 5, pageNumber * 5).map( article => {
      			return `<div class="article">
      						<div class="image-container">
-     							<img src="${article.urlToImage ? article.urlToImage : IMG_ERROR_URL}" onerror="imgError(this);" />
+     							<img 
+     								src="${article.urlToImage ? article.urlToImage : IMG_ERROR_URL}"
+     								onerror="imgError(this);" 
+     								alt="${article.title}"
+     							/>
      						</div>
 
      						<div class="title-container">
@@ -83,38 +87,88 @@ function generateNewsString(department, index) {
 		   generateNewsItems(department.newsResults, department.newsPageNumber);
 }
 
+function generateNavItemString(department, index) {
+	return `
+		<li>
+			<img
+				class="nav-department-seal"
+				src="${department.seal}"
+				alt="${department.name}" />
+			<div class="nav-department-name">
+				<a href="#${index}" onclick="hamburgerClick(document.getElementById('hamburger'))">
+					${department.name}
+				</a>
+			</div>
+		</li>
+	`;
+}
+function hamburgerClick(button) {
+    button.classList.toggle("change");
+
+    const navList = document.getElementById("nav-list");
+    if (navList.style.display === "none" || navList.style.display === "") {
+        navList.style.display = "block";
+    } else {
+        navList.style.display = "none";
+    }
+}
+
+function generateNavString(departments) {
+	return `
+		<nav role="nav">
+			<div class="hamburger" id="hamburger" onclick="hamburgerClick(this)">
+				<div class="bar1"></div>
+				<div class="bar2"></div>
+				<div class="bar3"></div>
+			</div>
+			<header>United States Cabinet News</header>
+			<div class="nav-list" id="nav-list">
+				<ul>
+					${ departments.map( (department, index) => { return generateNavItemString(department, index) }).join('') }
+				</ul>
+			</div>
+		</nav>
+	`;
+}
+
 function generateDepartmentString(departments) {
-	return departments.map( (department, index) => {
+
+	return generateNavString(departments) + departments.map( (department, index) => {
 		return `
-		<div class="department" id="${index}">
+		<section class="department" id="${index}">
 				
 				<div class="department-header">
 					<div class="department-title">
-						<img class="department-seal" src="${department.seal}" />
+						<img class="department-seal" src="${department.seal}" alt="${department.name}"/>
 						<div class="department-name">
 							<a href="${department.website}" target="_blank">${department.name}</a>
 						</div>
 					</div>
 				</div>
 
-				<div class="department-news">
+				<section class="department-news">
 					<div class="department-news-container">
 						${generateNewsString(department, index)}
 					</div>
 					<div class="department-tweets-container">
 						${generateTwitterTimelineString(department.twitterUsername)}
 					</div>
-				</div>
+				</section>
 
 			</div>
-		</div>`
+		</section>`
 	})
 	.concat(`<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`);
 }
 
-function generateSummaryString(summary, urlToImage) {
+function generateSummaryString(summary, urlToImage, title) {
+	console.log(summary);
 	return `
-		<img src="${urlToImage}" onerror="imgError(this);" class="summary-img" />
+		<img
+			src="${urlToImage}"
+			alt="${title}"
+			onerror="imgError(this);"
+			class="summary-img" />
 		<div class="summary-sentences">
 			<ul>${summary.sentences
 					.map( sentence => {
@@ -126,10 +180,10 @@ function generateSummaryString(summary, urlToImage) {
 		</div>
 	`
 }
-function renderSummary(summary, urlToImage) {
+function renderSummary(summary, urlToImage, title) {
 	console.log(summary.sentences);
 
-	$('.summary').html(generateSummaryString(summary, urlToImage));
+	$('.summary').html(generateSummaryString(summary, urlToImage, title));
 	$('.summary-window').show();
 	
 }
@@ -172,7 +226,7 @@ function getArticleSentiment(url, button) {
 			    });
 }
 
-function summarizeArticle(url, urlToImage) {
+function summarizeArticle(url, urlToImage, title) {
 
 	const req = new Request(`/summarize/?url=${url}`);
 
@@ -186,7 +240,7 @@ function summarizeArticle(url, urlToImage) {
 			        return response.json();
 			    })
 			    .then(function(summary) {
-			    	renderSummary(summary, urlToImage);
+			    	renderSummary(summary, urlToImage, title);
 			    })
 			    .catch(function(error) {
 			    	console.log('error: ' , error);
@@ -194,13 +248,16 @@ function summarizeArticle(url, urlToImage) {
 }
 
 function handleSummaryClick() {
+
 	$('main').on('click', '.summarize', function(event) {
 		console.log('summarize: ' + $(this).data('url'))
-		$('.summary-title').html(`<a target="_blank" href="${$(this).data('url')}">${$(this).data('title')}</a>`);
+		const {url, title, urltoimage} = $(this).data();
+		console.log(url + ' ' + title)
+		$('.summary-title').html(`<a target="_blank" href="${url}">${title}</a>`);
 		$('.summary').html('summarizing...');
 		$('.summary-window').show();
 
-		summarizeArticle($(this).data('url'), $(this).data('urltoimage'));
+		summarizeArticle(url, urltoimage, title);
 	});
 }
 
