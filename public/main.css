@@ -187,9 +187,6 @@ main {
 	display: block;
 	overflow: hidden;
 }
-.article:hover .summarize, .article:hover .get-sentiment {
-	visibility: visible;
-}
 
 .article .image-container {
 	width: 200px;
@@ -218,9 +215,12 @@ main {
 	float: left;
 	outline: none;
 }
-@media screen {
+@media only screen {
 	.summarize, .get-sentiment {
 		visibility: hidden;
+	}
+	.article:hover .summarize, .article:hover .get-sentiment {
+		visibility: visible;
 	}
 }
 
