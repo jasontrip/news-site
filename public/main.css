@@ -21,8 +21,7 @@ body {
 	font-weight: bold;
 	position: fixed;
 	top: 0;
-	left: 0;
-	margin: 15px;
+	left: 15px;
 	color: white;
 	background: rgb(66, 67, 68);
 	border: 0;
@@ -30,22 +29,19 @@ body {
 .close-intro:hover {
 	cursor: pointer;
 }
-.app-title, .app-explanation-wrapper {
-	margin-right: auto;
-	margin-left: auto;
-	text-align: center;
-	width: 100%;
-}
 .app-title {
-	font-size: 22px;
+	position: fixed;
+	top: 6px;
+	left: 70px;
+	font-size: 16px;
 	color: white;
-	margin-bottom: 40px;
-	margin-top: 20px;
 }
 .app-explanation-wrapper {
-	margin-bottom: 50px;
+	margin-top: 50px;
 	max-width: 500px;
 	overflow: auto;
+	margin-right: auto;
+	margin-left: auto;
 }
 .app-explanation {
 	float: left;
@@ -55,7 +51,7 @@ body {
 	padding: 15px;
 }
 .app-explanation-text {
-
+	text-align: center;
 }
 .image-wrapper {
 	background-color: white;
