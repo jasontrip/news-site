@@ -73,7 +73,7 @@ function generateNewsItems(newsResults, pageNumber) {
 	     								data-url="${article.url}"
 	     								data-title="${article.title}"
 	     								data-urltoimage="${article.urlToImage ? article.urlToImage : 'none'}">
-	     							Summarize
+	     							Summary
 	     						</button>
 	     					</div>
      					</div>
@@ -259,6 +259,11 @@ function handleCloseSummaryClick() {
 		$('.summary-window').hide();
 	});
 }
+function handleCloseIntroClick() {
+	$('.app-intro').on('click', '.close-intro', function(event) {
+		$('.app-intro').hide();
+	});
+}
 
 function handleNextPageClick() {
 	$('main').on('click', 'button.next-page', function(event) {
@@ -313,6 +318,7 @@ function getDepartments(state) {
 function handleEvents() {
 
     getDepartments(state);
+    handleCloseIntroClick();
     handleSummaryClick();
     handleCloseSummaryClick();
     handleNextPageClick();
