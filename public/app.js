@@ -262,6 +262,7 @@ function handleCloseSummaryClick() {
 function handleCloseIntroClick() {
 	$('.app-intro').on('click', '.close-intro', function(event) {
 		$('.app-intro').hide();
+		$('main').show();
 	});
 }
 
