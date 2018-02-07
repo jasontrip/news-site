@@ -43,7 +43,6 @@ body {
 	outline: none;
 	margin-top: 20px;
 	border-radius: 5px;
-	z-index: 1;
 
 }
 .close-intro:hover {
@@ -362,8 +361,6 @@ main {
 	top: 5px;
 	right: 5px;
 	font-size: 16px;
-	height: 12px;
-	width: 15px;
 	background-color: transparent;
 	color: white;
 	border: 0;
