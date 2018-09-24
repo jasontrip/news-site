@@ -30,7 +30,7 @@ function generateNewsHeaderString(department, index) {
         				<
         	</button>
         	<div class="result-count">
-        		${department.newsPageNumber.totalResults !== 0 ? department.newsPageNumber * 5 - 4 : 0 } -
+        		${department.newsResults.totalResults !== 0 ? department.newsPageNumber * 5 - 4 : 0 } -
         		${department.newsPageNumber * 5 > department.newsResults.totalResults
         			? department.newsResults.totalResults : department.newsPageNumber * 5}
         		of ${department.newsResults.totalResults < 100 ? department.newsResults.totalResults : 100}
