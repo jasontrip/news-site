@@ -2,7 +2,7 @@ module.exports = [
 	{name: "Department of State",
 	 seal: "img/seal_department_of_state.png",
 	 website: "https://www.state.gov/",
-	 searchTerms: ['"Department of State"', '"Rex Tillerson"'],
+	 searchTerms: ['"Department of State"', '"Rex Tillerson"', '"Mike Pompeo"'],
 	 newsResults: [],
 	 newsPageNumber: 1,
 	 twitterUsername: 'StateDept',

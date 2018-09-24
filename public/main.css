@@ -5,6 +5,7 @@ body {
 	font-family: 'Lora', serif;
 	letter-spacing: 0.02em;
 	margin: 0;
+	padding-bottom: 40px;
 }
 .app-intro {
 	width: 100%;
