@@ -69,8 +69,6 @@ app.get('/sentiment', (req, res) => {
 
 app.get('/summarize', (req, res) => {
 	
-	console.log('summarize was called');
-	
 	const {url} = req.query;
 	console.log("summarizing url: " + url);
 
