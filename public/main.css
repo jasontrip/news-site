@@ -22,6 +22,8 @@ body {
 	background: url(img/cabinet_photo.jpg) center center no-repeat;
 	background-size: cover;
 	min-height: 500px;
+	max-width: 1000px;
+	margin: 0 auto 0 auto;
 }
 .header-overlay {
 	width: 100%;
@@ -142,9 +144,10 @@ nav header {
 .nav-list {
 	position: fixed;
 	top: 40px;
-	width: 100%;
 	background-color: rgb(222, 224, 226);
 	display: none;
+	border: 1px black solid;
+	padding: 0 10px 0 0;
 }
 nav ul {
 	list-style: none;
