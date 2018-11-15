@@ -115,18 +115,15 @@ function hamburgerClick(button) {
 function generateNavString(departments) {
 	return `
 		<nav role="nav">
-			<div class="hamburger" id="hamburger" onclick="hamburgerClick(this)">
-				<div class="bar1"></div>
-				<div class="bar2"></div>
-				<div class="bar3"></div>
-			</div>
-			<header>United States Cabinet News</header>
-			<div class="nav-list" id="nav-list">
-				<ul>
-					${ departments.map( (department, index) => { return generateNavItemString(department, index) }).join('') }
-				</ul>
+			<div class="skip-to-department" onclick="hamburgerClick(this)">
+				Skip to Department
 			</div>
 		</nav>
+		<div class="nav-list" id="nav-list">
+			<ul>
+				${ departments.map( (department, index) => { return generateNavItemString(department, index) }).join('') }
+			</ul>
+		</div>
 	`;
 }
 

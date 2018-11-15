@@ -22,7 +22,6 @@ body {
 	background: url(img/cabinet_photo.jpg) center center no-repeat;
 	background-size: cover;
 	min-height: 500px;
-	max-width: 1000px;
 	margin: 0 auto 0 auto;
 }
 .header-overlay {
@@ -92,13 +91,16 @@ nav {
 	position: fixed;
 	top: 0;
 	width: 100%;
+	background: rgb(66, 67, 68);
+	height: 40px;
+	padding: 10px;
+	color: white;
 }
 nav header {
 	width: 100%;
 	text-align: center;
-	padding: 10px;
-	height: 40px;
-	background: rgb(66, 67, 68);
+	
+	height: 40px
 	color: white;
 }
 .hamburger {
@@ -106,6 +108,17 @@ nav header {
     top: 3px;
     left: 15px;
     cursor: pointer;
+}
+.skip-to-department {
+	position: fixed;
+	top: 6px;
+	left: 20px;
+	cursor: pointer;
+	color: white;
+}
+
+.skip-to-department:hover {
+	font-weight: bold;
 }
 
 .bar1, .bar2, .bar3 {
@@ -148,18 +161,19 @@ nav header {
 	display: none;
 	border: 1px black solid;
 	padding: 0 10px 0 0;
+	min-height: 100vh;
 }
-nav ul {
+.nav-list ul {
 	list-style: none;
 	margin-left: auto;
 	margin-right: auto;
 	width: 450px;
 }
-nav a:link, nav a:visited {
+.nav-list a:link, .nav-list a:visited {
 	text-decoration: none;
 	color: inherit;
 }
-nav a:hover {
+.nav-list a:hover {
 	text-decoration: underline;
 }
 
