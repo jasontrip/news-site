@@ -130,9 +130,22 @@ function generateNavString(departments) {
 	`;
 }
 
+function generateWhatToDoString() {
+	return `
+		<div class="whatToDoWrapper">
+			<div class="whatToDo">
+				Scroll down to see the news, or
+					<a href="#" onclick="hamburgerClick(document.getElementById('hamburger'))">
+						click the menu
+					</a> to jump to a department!
+			</div>
+		</div>
+	`
+}
+
 function generateDepartmentString(departments) {
 
-	return generateNavString(departments) + departments.map( (department, index) => {
+	return generateNavString(departments) + generateWhatToDoString() + departments.map( (department, index) => {
 		return `
 		<section class="department" id="${index}">
 				
