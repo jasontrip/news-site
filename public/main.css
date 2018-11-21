@@ -22,7 +22,6 @@ body {
 	background: url(img/cabinet_photo.jpg) center center no-repeat;
 	background-size: cover;
 	min-height: 500px;
-	max-width: 1000px;
 	margin: 0 auto 0 auto;
 }
 .header-overlay {
